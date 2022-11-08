@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+main() {
+	local storeRoot="$HOME/.password-store"
+	local selectedFile
+	local selectedField
+
+	# Prompt the user for the file to select
+	selectedFile="$(find "$storeRoot" -type f | sed -E "s#$storeRoot/##;s/.gpg$//" | dmenu)"
+	if [[ -z "$selectedFile" ]]; then
+		return
+	fi
+
+	# Prompt the user for a field to select
+	selectedField=$(pass show "$selectedFile" | grep -E '^\w+:' | sed -E 's/^(\w+):.*$/\1/' | dmenu)
+	if [[ -z "$selectedField" ]]; then
+		return
+	fi
+
+	# Place the selected field into the clipboard
+	pass show "$selectedFile" | grep -E "^$selectedField: " | sed -E 's/^\w+: (.*)$/\1/' | xclip -selection clipboard
+} && main "$@" && unset -f main
+
