@@ -17,7 +17,7 @@ BUILD_BIN_FILE=$(BUILD_BIN_DIR)/$(BIN_NAME)
 all: $(BUILD_BIN_FILE)
 
 install: all
-	install $(BUILD_BIN_FILE) $(PREFIX)/bin
+	install -D $(BUILD_BIN_FILE) -t $(PREFIX)/bin
 
 .PHONY: clean
 clean:
