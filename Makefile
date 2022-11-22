@@ -16,14 +16,20 @@ BUILD_BIN_FILE=$(BUILD_BIN_DIR)/$(BIN_NAME)
 .PHONY: all
 all: $(BUILD_BIN_FILE)
 
-install: all
-	install -D $(BUILD_BIN_FILE) -t $(PREFIX)/bin
-
 .PHONY: clean
 clean:
 	-rm -rf $(wildcard $(BUILD_DIR)/*)
+
+.PHONY: install
+install: all
+	install -D $(BUILD_BIN_FILE) -t $(PREFIX)/bin
+
+.PHONY: uninstall
+uninstall:
+	-rm -f $(PREFIX)/bin/$(BIN_NAME)
 
 $(BUILD_BIN_FILE): $(SRC_BIN_FILE)
 	$(BASH_SCRIPT_LINTER) $^
 	mkdir -p $(dir $(BUILD_BIN_FILE))
 	cp $(SRC_BIN_FILE) $(BUILD_BIN_FILE)
+
